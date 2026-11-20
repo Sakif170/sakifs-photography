@@ -1,0 +1,435 @@
+<!doctype html>
+<html lang="bn">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#11110f">
+  <title>Sakif Bin Alam — Photography</title>
+
+  <style>
+    :root {
+      --bg: #11110f;
+      --surface: #191916;
+      --text: #f4f0e8;
+      --muted: #a7a397;
+      --accent: #d8b477;
+      --line: #30302a;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--text);
+      font-family: "Noto Sans Bengali", "Hind Siliguri", system-ui, sans-serif;
+    }
+
+    body.no-scroll { overflow: hidden; }
+
+    .wrap {
+      width: min(1100px, calc(100% - 36px));
+      margin: 0 auto;
+    }
+
+    .topbar { border-bottom: 1px solid var(--line); }
+
+    .bar {
+      min-height: 76px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      color: var(--text);
+      text-decoration: none;
+    }
+
+    .monogram {
+      width: 42px;
+      height: 42px;
+      display: grid;
+      place-items: center;
+      border: 1px solid var(--accent);
+      border-radius: 50%;
+      color: var(--accent);
+      font: 22px Georgia, serif;
+    }
+
+    .brand strong, .brand small { display: block; }
+    .brand strong { font-size: 13px; letter-spacing: .12em; }
+    .brand small { margin-top: 3px; color: var(--muted); font-size: 10px; letter-spacing: .16em; }
+
+    .location { color: var(--muted); font-size: 13px; }
+
+    .hero {
+      padding: 78px 0 56px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .eyebrow {
+      color: var(--accent);
+      font-size: 12px;
+      letter-spacing: .12em;
+    }
+
+    .hero h1 {
+      margin: 18px 0;
+      font-size: clamp(40px, 7vw, 76px);
+      line-height: 1.18;
+      font-weight: 600;
+    }
+
+    .hero h1 span { color: var(--accent); }
+
+    .intro {
+      max-width: 540px;
+      color: var(--muted);
+      line-height: 1.9;
+    }
+
+    .archive { padding: 50px 0 72px; }
+
+    .section-head {
+      display: flex;
+      align-items: end;
+      justify-content: space-between;
+      gap: 20px;
+    }
+
+    .section-head .eyebrow { margin: 0 0 8px; }
+
+    .section-head h2 {
+      margin: 0;
+      font-size: 28px;
+    }
+
+    #photo-count { color: var(--muted); font-size: 14px; }
+
+    .filters {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 9px;
+      margin: 24px 0;
+    }
+
+    .filter {
+      padding: 9px 16px;
+      border: 1px solid var(--line);
+      border-radius: 99px;
+      background: transparent;
+      color: var(--muted);
+      font: inherit;
+      cursor: pointer;
+    }
+
+    .filter:hover, .filter.active {
+      border-color: var(--accent);
+      color: var(--accent);
+    }
+
+    .gallery {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+      gap: 22px 16px;
+    }
+
+    .card { min-width: 0; }
+
+    .photo-open {
+      position: relative;
+      display: block;
+      width: 100%;
+      aspect-ratio: 4 / 3;
+      padding: 0;
+      overflow: hidden;
+      border: 0;
+      border-radius: 10px;
+      background: var(--surface);
+      cursor: zoom-in;
+    }
+
+    .photo-open img {
+      width: 100%;
+      height: 100%;
+      display: block;
+      object-fit: cover;
+      transition: transform .3s ease;
+    }
+
+    .photo-open:hover img { transform: scale(1.04); }
+
+    .zoom-mark {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      padding: 4px 8px;
+      border-radius: 5px;
+      background: #11110fcc;
+      color: white;
+    }
+
+    .photo-info {
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+      margin-top: 11px;
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .photo-info span { color: var(--accent); }
+    .card h3 { margin: 6px 0 0; font-size: 16px; font-weight: 500; }
+
+    .empty {
+      grid-column: 1 / -1;
+      padding: 36px 20px;
+      border: 1px dashed var(--line);
+      border-radius: 10px;
+      color: var(--muted);
+      text-align: center;
+      line-height: 1.8;
+    }
+
+    footer {
+      padding: 24px 0;
+      border-top: 1px solid var(--line);
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .lightbox {
+      position: fixed;
+      inset: 0;
+      z-index: 5;
+      display: grid;
+      place-items: center;
+      padding: 24px;
+      background: #000e;
+    }
+
+    .lightbox[hidden] { display: none; }
+
+    .lightbox-inner {
+      position: relative;
+      width: min(1100px, 100%);
+      text-align: center;
+    }
+
+    .lightbox-inner img {
+      display: block;
+      max-width: 100%;
+      max-height: 78vh;
+      margin: auto;
+      object-fit: contain;
+    }
+
+    .lightbox-inner p { color: var(--text); }
+
+    .close {
+      position: absolute;
+      top: -42px;
+      right: 0;
+      border: 0;
+      background: transparent;
+      color: white;
+      font-size: 32px;
+      cursor: pointer;
+    }
+
+    @media (max-width: 600px) {
+      .location { display: none; }
+      .hero { padding: 58px 0 42px; }
+      .gallery { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px 10px; }
+      .photo-info { font-size: 11px; }
+      .card h3 { font-size: 14px; }
+    }
+  </style>
+</head>
+
+<body>
+  <header class="topbar">
+    <div class="wrap bar">
+      <a class="brand" href="#home">
+        <span class="monogram">S</span>
+        <span>
+          <strong>SAKIF BIN ALAM</strong>
+          <small>PHOTOGRAPHY ARCHIVE</small>
+        </span>
+      </a>
+      <span class="location">ইসলামী বিশ্ববিদ্যালয় · বাংলাদেশ</span>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <section class="hero" id="home">
+      <p class="eyebrow">আমার ফটোগ্রাফি জার্নাল</p>
+      <h1>দৈনন্দিন মুহূর্ত,<br><span>আমার লেন্সে।</span></h1>
+      <p class="intro">
+        ক্যাম্পাস, প্রকৃতি, মানুষ ও পথচলার গল্প—আমার ক্যামেরায় ধরা মুহূর্তগুলোর সংগ্রহ।
+      </p>
+    </section>
+
+    <section class="archive" id="archive">
+      <div class="section-head">
+        <div>
+          <p class="eyebrow">PHOTO COLLECTION</p>
+          <h2>ছবির আর্কাইভ</h2>
+        </div>
+        <span id="photo-count"></span>
+      </div>
+
+      <div class="filters" id="filters"></div>
+      <div class="gallery" id="gallery"></div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="wrap">© Sakif Bin Alam · Photography</div>
+  </footer>
+
+  <div class="lightbox" id="lightbox" role="dialog" aria-modal="true" aria-label="ছবির বড় ভিউ" hidden>
+    <div class="lightbox-inner">
+      <button class="close" id="close-lightbox" type="button" aria-label="বন্ধ করুন">×</button>
+      <img id="lightbox-img" alt="">
+      <p id="lightbox-caption"></p>
+    </div>
+  </div>
+
+  <script>
+    const categoryNames = {
+      campus: "ক্যাম্পাস",
+      nature: "প্রকৃতি",
+      street: "স্ট্রিট",
+      portrait: "পোর্ট্রেট",
+      event: "ইভেন্ট"
+    };
+
+    const photos = [
+      // নিজের ছবি এই ফরম্যাটে যোগ করুন:
+      // { src: "images/iu-evening.jpg", title: "সন্ধ্যার ক্যাম্পাস", category: "campus", date: "2025-03-08" },
+    ];
+
+    let activeCategory = "all";
+
+    const filterHost = document.querySelector("#filters");
+    const gallery = document.querySelector("#gallery");
+    const lightbox = document.querySelector("#lightbox");
+    const lightboxImg = document.querySelector("#lightbox-img");
+    const lightboxCaption = document.querySelector("#lightbox-caption");
+
+    function escapeHTML(value) {
+      const replacements = {
+        "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;"
+      };
+      return String(value ?? "").replace(/[&<>"']/g, char => replacements[char]);
+    }
+
+    function formatDate(date) {
+      if (!date) return "";
+      const parsed = new Date(date + "T12:00:00");
+      if (Number.isNaN(parsed.getTime())) return date;
+      return new Intl.DateTimeFormat("bn-BD", {
+        day: "numeric", month: "short", year: "numeric"
+      }).format(parsed);
+    }
+
+    function renderFilters() {
+      const categories = ["all", ...new Set(photos.map(photo => photo.category))];
+
+      filterHost.innerHTML = categories.map(category => {
+        const label = category === "all"
+          ? "সব ছবি"
+          : (categoryNames[category] || category);
+
+        return `<button type="button"
+          class="filter ${activeCategory === category ? "active" : ""}"
+          data-category="${escapeHTML(category)}">${escapeHTML(label)}</button>`;
+      }).join("");
+    }
+
+    function renderGallery() {
+      const visiblePhotos = photos
+        .map((photo, index) => ({ photo, index }))
+        .filter(item => activeCategory === "all" || item.photo.category === activeCategory);
+
+      document.querySelector("#photo-count").textContent = `${visiblePhotos.length}টি ছবি`;
+
+      if (visiblePhotos.length === 0) {
+        gallery.innerHTML = `<div class="empty">
+          এখনো ছবি যোগ করা হয়নি।<br>
+          ছবি যোগ করতে GitHub-এ <code>photos</code> তালিকা সম্পাদনা করুন।
+        </div>`;
+        return;
+      }
+
+      gallery.innerHTML = visiblePhotos.map(({ photo, index }) => {
+        const category = categoryNames[photo.category] || photo.category;
+        const date = formatDate(photo.date);
+
+        return `<article class="card">
+          <button class="photo-open" type="button" data-index="${index}"
+            aria-label="${escapeHTML(photo.title)}—বড় করে দেখুন">
+            <img src="${escapeHTML(photo.src)}" alt="${escapeHTML(photo.title)}"
+              loading="lazy" decoding="async">
+            <span class="zoom-mark" aria-hidden="true">↗</span>
+          </button>
+          <div class="photo-info">
+            <span>${escapeHTML(category)}</span>
+            ${date ? `<time>${escapeHTML(date)}</time>` : ""}
+          </div>
+          <h3>${escapeHTML(photo.title)}</h3>
+        </article>`;
+      }).join("");
+    }
+
+    filterHost.addEventListener("click", event => {
+      const button = event.target.closest("[data-category]");
+      if (!button) return;
+      activeCategory = button.dataset.category;
+      renderFilters();
+      renderGallery();
+    });
+
+    gallery.addEventListener("click", event => {
+      const button = event.target.closest("[data-index]");
+      if (!button) return;
+
+      const photo = photos[Number(button.dataset.index)];
+      if (!photo) return;
+
+      lightboxImg.src = photo.src;
+      lightboxImg.alt = photo.title;
+      lightboxCaption.textContent = [
+        photo.title,
+        categoryNames[photo.category] || photo.category,
+        formatDate(photo.date)
+      ].filter(Boolean).join(" · ");
+
+      lightbox.hidden = false;
+      document.body.classList.add("no-scroll");
+    });
+
+    function closeLightbox() {
+      lightbox.hidden = true;
+      document.body.classList.remove("no-scroll");
+    }
+
+    document.querySelector("#close-lightbox").addEventListener("click", closeLightbox);
+    lightbox.addEventListener("click", event => {
+      if (event.target === lightbox) closeLightbox();
+    });
+    document.addEventListener("keydown", event => {
+      if (event.key === "Escape") closeLightbox();
+    });
+
+    renderFilters();
+    renderGallery();
+  </script>
+</body>
+</html>
